@@ -1,16 +1,16 @@
 (() => {
   'use strict';
 
-  const ROOT_ID = 'gbcb-root';
+  const ROOT_ID = 'fcb-root';
   const MAX_BUTTONS = 10;
-  const HOME_URL = 'https://game.granbluefantasy.jp/#top';
   const DEFAULT_SETTINGS = { enabled: true, editMode: false, buttons: [] };
   const ACTIONS = {
     reload: { icon: '↻', title: '再読み込み' },
     back: { icon: '←', title: '戻る' },
     forward: { icon: '→', title: '進む' },
-    home: { icon: '⌂', title: 'ホームへ' },
-    url: { icon: '↗', title: 'URLを開く' }
+    home: { icon: '⌂', title: 'サイトTOPへ' },
+    url: { icon: '↗', title: 'URLを開く' },
+    newTab: { icon: '⧉', title: 'URLを新しいタブで開く' }
   };
 
   let settings = DEFAULT_SETTINGS;
@@ -70,12 +70,22 @@
         window.history.forward();
         break;
       case 'home':
-        window.location.assign(HOME_URL);
+        if (['http:', 'https:'].includes(window.location.protocol)) {
+          window.location.assign(new URL('/', window.location.href).href);
+        }
         break;
       case 'url':
         try {
           const target = new URL(button.url);
-          if (['http:', 'https:'].includes(target.protocol)) window.location.assign(target.href);
+          if (['http:', 'https:', 'file:'].includes(target.protocol)) window.location.assign(target.href);
+        } catch { /* ignore invalid storage values */ }
+        break;
+      case 'newTab':
+        try {
+          const target = new URL(button.url);
+          if (['http:', 'https:', 'file:'].includes(target.protocol)) {
+            chrome.runtime.sendMessage({ type: 'OPEN_URL_IN_NEW_TAB', url: target.href });
+          }
         } catch { /* ignore invalid storage values */ }
         break;
       default:
@@ -130,7 +140,7 @@
     const element = document.createElement('button');
     const action = ACTIONS[button.action];
     element.type = 'button';
-    element.className = 'gbcb-button';
+    element.className = 'fcb-button';
     element.dataset.id = button.id;
     element.dataset.size = button.size;
     element.style.left = `${button.x}%`;
@@ -140,11 +150,11 @@
     element.setAttribute('aria-label', button.label);
 
     const icon = document.createElement('span');
-    icon.className = 'gbcb-icon';
+    icon.className = 'fcb-icon';
     icon.setAttribute('aria-hidden', 'true');
     icon.textContent = action.icon;
     const label = document.createElement('span');
-    label.className = 'gbcb-label';
+    label.className = 'fcb-label';
     label.textContent = button.label;
     element.append(icon, label);
 
@@ -160,18 +170,18 @@
   function render() {
     const container = ensureRoot();
     container.replaceChildren();
-    container.classList.toggle('gbcb-editing', settings.editMode);
+    container.classList.toggle('fcb-editing', settings.editMode);
     container.hidden = !settings.enabled;
     if (!settings.enabled) return;
 
     settings.buttons.forEach((button) => container.append(makeButton(button)));
 
     const editBar = document.createElement('div');
-    editBar.className = 'gbcb-edit-bar';
+    editBar.className = 'fcb-edit-bar';
     editBar.innerHTML = '<span>配置編集中：ボタンをドラッグ</span>';
     const done = document.createElement('button');
     done.type = 'button';
-    done.className = 'gbcb-edit-done';
+    done.className = 'fcb-edit-done';
     done.textContent = '完了';
     done.addEventListener('click', () => chrome.storage.local.set({ editMode: false }));
     editBar.append(done);

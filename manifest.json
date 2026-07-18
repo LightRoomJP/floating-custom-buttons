@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "グラブル Custom Buttons",
-  "version": "1.2.0",
-  "description": "グラブルの画面上に、最大10個のカスタムボタンを自由配置し、配置プリセットと更新通知を利用できます。",
+  "name": "Floating Custom Buttons",
+  "version": "2.0.0",
+  "description": "Webページ上に最大10個のカスタムボタンを自由配置し、配置プリセットと更新通知を利用できます。",
   "permissions": [
     "storage",
     "alarms",
@@ -14,14 +14,26 @@
   "background": {
     "service_worker": "background.js"
   },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "action": {
-    "default_title": "Custom Buttons の設定",
+    "default_title": "Floating Custom Buttons の設定",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    },
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
       "matches": [
-        "https://game.granbluefantasy.jp/*"
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
       ],
       "css": [
         "content.css"
