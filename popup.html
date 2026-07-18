@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Buttons</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="header">
+    <div>
+      <p class="eyebrow">GRANBLUE FANTASY</p>
+      <h1>Custom Buttons</h1>
+    </div>
+    <label class="switch" title="ボタンの表示・非表示">
+      <input id="enabled" type="checkbox">
+      <span></span>
+    </label>
+  </header>
+
+  <main>
+    <section id="updatePanel" class="update-panel">
+      <div class="update-copy">
+        <div class="update-heading">
+          <strong>アップデート</strong>
+          <span id="currentVersion">v1.2.0</span>
+        </div>
+        <small id="updateStatus">更新状況を確認しています</small>
+      </div>
+      <div class="update-actions">
+        <button id="openUpdate" class="button update-open" type="button" hidden>更新を見る</button>
+        <button id="checkUpdate" class="button secondary compact-button" type="button">確認</button>
+      </div>
+    </section>
+
+    <section class="placement">
+      <div>
+        <strong>画面上の配置</strong>
+        <small>編集モードにして、ボタンをドラッグ</small>
+      </div>
+      <button id="editMode" class="button secondary" type="button">配置を編集</button>
+    </section>
+
+    <section class="preset-panel">
+      <div class="section-title preset-title">
+        <span>配置プリセット</span>
+        <span id="presetCount">0件</span>
+      </div>
+      <div class="preset-load-row">
+        <select id="presetSelect" aria-label="読み込むプリセット">
+          <option value="">プリセットを選択</option>
+        </select>
+        <button id="loadPreset" class="button secondary compact-button" type="button" disabled>読込</button>
+        <button id="deletePreset" class="button danger compact-button" type="button" disabled>削除</button>
+      </div>
+      <div class="preset-save-row">
+        <input id="presetName" type="text" maxlength="30" placeholder="プリセット名（例：周回用）">
+        <button id="savePreset" class="button secondary" type="button">現在を保存</button>
+      </div>
+      <small>ボタンの数・設定・画面上の位置をまとめて保存します。</small>
+    </section>
+
+    <div class="section-title">
+      <span>ボタン</span>
+      <span id="count">0 / 10</span>
+    </div>
+    <div id="buttonList" class="button-list"></div>
+    <button id="addButton" class="add-button" type="button">＋ ボタンを追加</button>
+  </main>
+
+  <footer>
+    <span id="status" role="status"></span>
+    <button id="saveButton" class="button primary" type="button">保存して反映</button>
+  </footer>
+
+  <template id="buttonTemplate">
+    <article class="button-card">
+      <div class="card-top">
+        <span class="number"></span>
+        <button class="delete-button" type="button" title="このボタンを削除">削除</button>
+      </div>
+      <label class="field full">
+        <span>表示名</span>
+        <input class="label-input" type="text" maxlength="20" placeholder="リロード">
+      </label>
+      <div class="form-row">
+        <label class="field">
+          <span>動作</span>
+          <select class="action-input">
+            <option value="reload">↻ 再読み込み</option>
+            <option value="back">← 戻る</option>
+            <option value="forward">→ 進む</option>
+            <option value="home">⌂ グラブルTOP</option>
+            <option value="url">↗ URLを開く</option>
+          </select>
+        </label>
+        <label class="field compact">
+          <span>サイズ</span>
+          <select class="size-input">
+            <option value="small">小</option>
+            <option value="medium">中</option>
+            <option value="large">大</option>
+          </select>
+        </label>
+        <label class="field color-field">
+          <span>色</span>
+          <input class="color-input" type="color">
+        </label>
+      </div>
+      <label class="field full url-field">
+        <span>開くURL</span>
+        <input class="url-input" type="url" placeholder="https://example.com/">
+      </label>
+    </article>
+  </template>
+
+  <script src="popup.js"></script>
+</body>
+</html>

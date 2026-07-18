@@ -1,0 +1,128 @@
+#gbcb-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
+}
+
+#gbcb-root .gbcb-button {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-sizing: border-box;
+  min-width: 72px;
+  height: 40px;
+  padding: 0 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .35), inset 0 1px rgba(255, 255, 255, .18);
+  color: #fff;
+  font: 700 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
+  letter-spacing: .02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: filter 120ms ease, transform 80ms ease, box-shadow 120ms ease;
+}
+
+#gbcb-root .gbcb-button:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, .42), inset 0 1px rgba(255, 255, 255, .22);
+}
+
+#gbcb-root .gbcb-button:active {
+  transform: translateY(1px);
+}
+
+#gbcb-root .gbcb-button[data-size="small"] {
+  min-width: 58px;
+  height: 34px;
+  padding: 0 11px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+#gbcb-root .gbcb-button[data-size="large"] {
+  min-width: 92px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+#gbcb-root.gbcb-editing .gbcb-button {
+  border: 2px dashed #fff;
+  cursor: grab;
+  animation: gbcb-edit-pulse 1.6s ease-in-out infinite;
+}
+
+#gbcb-root.gbcb-editing .gbcb-button:active {
+  cursor: grabbing;
+  animation: none;
+}
+
+#gbcb-root .gbcb-icon {
+  flex: 0 0 auto;
+  font-size: 16px;
+}
+
+#gbcb-root .gbcb-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#gbcb-root .gbcb-edit-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 9px 8px 14px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 999px;
+  background: rgba(20, 25, 36, .94);
+  box-shadow: 0 5px 22px rgba(0, 0, 0, .4);
+  color: #fff;
+  font: 600 12px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+#gbcb-root.gbcb-editing .gbcb-edit-bar {
+  display: flex;
+}
+
+#gbcb-root .gbcb-edit-done {
+  min-height: 29px;
+  padding: 0 13px;
+  border: 1px solid #66d2ff;
+  border-radius: 999px;
+  background: #147db8;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#gbcb-root .gbcb-edit-done:hover {
+  background: #1b93d2;
+}
+
+@keyframes gbcb-edit-pulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(0, 0, 0, .35), 0 0 0 0 rgba(255, 255, 255, .18); }
+  50% { box-shadow: 0 4px 16px rgba(0, 0, 0, .35), 0 0 0 5px rgba(255, 255, 255, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gbcb-root .gbcb-button { transition: none; }
+  #gbcb-root.gbcb-editing .gbcb-button { animation: none; }
+}
