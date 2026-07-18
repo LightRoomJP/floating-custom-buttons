@@ -112,6 +112,15 @@
     return activeCheck;
   }
 
+  async function configureSidePanel() {
+    if (!chrome.sidePanel?.setPanelBehavior) return;
+    try {
+      await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+    } catch {
+      // Unsupported browser versions keep the extension installed without failing startup.
+    }
+  }
+
   async function scheduleChecks() {
     await chrome.alarms.create(UPDATE_ALARM, {
       delayInMinutes: 1,
@@ -136,7 +145,10 @@
     }
   }
 
+  configureSidePanel();
+
   chrome.runtime.onInstalled.addListener(() => {
+    configureSidePanel();
     scheduleChecks();
     checkForUpdates(true);
   });

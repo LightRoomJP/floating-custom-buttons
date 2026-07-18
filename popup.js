@@ -52,19 +52,6 @@
     return Math.min(max, Math.max(min, value));
   }
 
-  async function fitPopupHeight() {
-    let popupHeight = 600;
-    try {
-      const browserWindow = await chrome.windows.getCurrent();
-      if (Number.isFinite(browserWindow?.height)) {
-        popupHeight = clamp(Math.floor(browserWindow.height - 140), 460, 600);
-      }
-    } catch {
-      // 取得できない環境ではChromeのポップアップ上限を使用する。
-    }
-    document.documentElement.style.setProperty('--popup-height', `${popupHeight}px`);
-  }
-
   function defaultPosition(index) {
     return { x: index % 2 === 0 ? 6 : 56, y: 14 + Math.floor(index / 2) * 13 };
   }
@@ -244,7 +231,15 @@
     try {
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       const tab = tabs[0];
-      const url = new URL(String(tab?.url || ''));
+      let pageInfo = { title: tab?.title, url: tab?.url };
+      if (tab?.id) {
+        try {
+          pageInfo = { ...pageInfo, ...await chrome.tabs.sendMessage(tab.id, { type: 'GET_CURRENT_PAGE_INFO' }) };
+        } catch {
+          // Browser-internal pages do not have the content script.
+        }
+      }
+      const url = new URL(String(pageInfo.url || ''));
       if (!['http:', 'https:', 'file:'].includes(url.protocol)) {
         setStatus('このページはボタンに設定できません', true);
         return;
@@ -252,7 +247,7 @@
       const index = state.buttons.length;
       state.buttons.push({
         id: uid(),
-        label: currentTabLabel(tab, url),
+        label: currentTabLabel(pageInfo, url),
         action: 'url',
         url: url.href,
         color: DEFAULT_COLORS[index % DEFAULT_COLORS.length],
@@ -356,8 +351,6 @@
     renderPresets('');
     setStatus('プリセットを削除しました');
   });
-
-  fitPopupHeight();
 
   chrome.storage.local.get(DEFAULT_SETTINGS).then((stored) => {
     state = {

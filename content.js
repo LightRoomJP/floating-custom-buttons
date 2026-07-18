@@ -188,6 +188,12 @@
     container.append(editBar);
   }
 
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message?.type !== 'GET_CURRENT_PAGE_INFO') return false;
+    sendResponse({ title: document.title, url: window.location.href });
+    return false;
+  });
+
   async function initialize() {
     try {
       settings = normalizeSettings(await chrome.storage.local.get(DEFAULT_SETTINGS));
