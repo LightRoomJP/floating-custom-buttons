@@ -13,8 +13,13 @@
 
 body {
   width: 380px;
+  height: 600px;
+  max-height: 100vh;
   min-height: 310px;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
@@ -25,6 +30,7 @@ button { color: inherit; }
 
 .header {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   padding: 18px 18px 15px;
@@ -49,7 +55,14 @@ h1 { margin: 0; font-size: 20px; line-height: 1.1; }
 .switch input:checked + span { background: #1689c4; }
 .switch input:checked + span::after { transform: translateX(18px); }
 
-main { padding: 14px 16px 16px; }
+main {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 14px 16px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
 
 .update-panel {
   display: flex;
@@ -186,9 +199,8 @@ main { padding: 14px 16px 16px; }
 .button.secondary.active { border-color: #ffca68; background: #70531d; color: #fff1cc; }
 
 footer {
-  position: sticky;
-  bottom: 0;
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
