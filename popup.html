@@ -19,53 +19,61 @@
   </header>
 
   <main>
-    <section id="updatePanel" class="update-panel">
-      <div class="update-copy">
-        <div class="update-heading">
-          <strong>アップデート</strong>
-          <span id="currentVersion">v2.0.0</span>
-        </div>
-        <small id="updateStatus">更新状況を確認しています</small>
-      </div>
-      <div class="update-actions">
-        <button id="openUpdate" class="button update-open" type="button" hidden>更新を見る</button>
-        <button id="checkUpdate" class="button secondary compact-button" type="button">確認</button>
-      </div>
-    </section>
+    <details class="settings-panel">
+      <summary>更新・配置・プリセット</summary>
+      <div class="settings-body">
+        <section id="updatePanel" class="update-panel">
+          <div class="update-copy">
+            <div class="update-heading">
+              <strong>アップデート</strong>
+              <span id="currentVersion">v2.1.0</span>
+            </div>
+            <small id="updateStatus">更新状況を確認しています</small>
+          </div>
+          <div class="update-actions">
+            <button id="openUpdate" class="button update-open" type="button" hidden>更新を見る</button>
+            <button id="checkUpdate" class="button secondary compact-button" type="button">確認</button>
+          </div>
+        </section>
 
-    <section class="placement">
-      <div>
-        <strong>画面上の配置</strong>
-        <small>編集モードにして、ボタンをドラッグ</small>
-      </div>
-      <button id="editMode" class="button secondary" type="button">配置を編集</button>
-    </section>
+        <section class="placement">
+          <div>
+            <strong>画面上の配置</strong>
+            <small>編集モードにして、ボタンをドラッグ</small>
+          </div>
+          <button id="editMode" class="button secondary" type="button">配置を編集</button>
+        </section>
 
-    <section class="preset-panel">
-      <div class="section-title preset-title">
-        <span>配置プリセット</span>
-        <span id="presetCount">0件</span>
+        <section class="preset-panel">
+          <div class="section-title preset-title">
+            <span>配置プリセット</span>
+            <span id="presetCount">0件</span>
+          </div>
+          <div class="preset-load-row">
+            <select id="presetSelect" aria-label="読み込むプリセット">
+              <option value="">プリセットを選択</option>
+            </select>
+            <button id="loadPreset" class="button secondary compact-button" type="button" disabled>読込</button>
+            <button id="deletePreset" class="button danger compact-button" type="button" disabled>削除</button>
+          </div>
+          <div class="preset-save-row">
+            <input id="presetName" type="text" maxlength="30" placeholder="プリセット名（例：周回用）">
+            <button id="savePreset" class="button secondary" type="button">現在を保存</button>
+          </div>
+          <small>ボタンの数・設定・画面上の位置をまとめて保存します。</small>
+        </section>
       </div>
-      <div class="preset-load-row">
-        <select id="presetSelect" aria-label="読み込むプリセット">
-          <option value="">プリセットを選択</option>
-        </select>
-        <button id="loadPreset" class="button secondary compact-button" type="button" disabled>読込</button>
-        <button id="deletePreset" class="button danger compact-button" type="button" disabled>削除</button>
-      </div>
-      <div class="preset-save-row">
-        <input id="presetName" type="text" maxlength="30" placeholder="プリセット名（例：周回用）">
-        <button id="savePreset" class="button secondary" type="button">現在を保存</button>
-      </div>
-      <small>ボタンの数・設定・画面上の位置をまとめて保存します。</small>
-    </section>
+    </details>
 
     <div class="section-title">
       <span>ボタン</span>
       <span id="count">0 / 10</span>
     </div>
     <div id="buttonList" class="button-list"></div>
-    <button id="addButton" class="add-button" type="button">＋ ボタンを追加</button>
+    <div class="add-actions">
+      <button id="addCurrentTabButton" class="add-button current-tab" type="button">＋ 現在のタブから追加</button>
+      <button id="addButton" class="add-button" type="button">＋ 手動で追加</button>
+    </div>
   </main>
 
   <footer>
