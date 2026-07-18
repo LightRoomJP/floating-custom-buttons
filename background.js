@@ -1,12 +1,12 @@
 (() => {
   'use strict';
 
-  const REPOSITORY = 'LightRoomJP/granblue-custom-buttons';
+  const REPOSITORY = 'LightRoomJP/floating-custom-buttons';
   const RELEASE_API = `https://api.github.com/repos/${REPOSITORY}/releases/latest`;
   const RELEASES_URL = `https://github.com/${REPOSITORY}/releases`;
   const UPDATE_ALARM = 'github-release-update-check';
   const CHECK_INTERVAL_MINUTES = 360;
-  const NOTIFICATION_PREFIX = 'gbcb-update-';
+  const NOTIFICATION_PREFIX = 'fcb-update-';
 
   let activeCheck = null;
 
@@ -40,7 +40,7 @@
     await chrome.notifications.create(`${NOTIFICATION_PREFIX}${status.latestVersion}`, {
       type: 'basic',
       iconUrl: chrome.runtime.getURL('notification-icon.svg'),
-      title: `Custom Buttons v${status.latestVersion}`,
+      title: `Floating Custom Buttons v${status.latestVersion}`,
       message: '新しいバージョンがGitHubに公開されました。',
       contextMessage: `現在のバージョン: v${status.currentVersion}`,
       buttons: [{ title: 'リリースページを開く' }],
@@ -125,6 +125,17 @@
     await chrome.tabs.create({ url });
   }
 
+  async function openUrlInNewTab(value) {
+    try {
+      const url = new URL(String(value || ''));
+      if (!['http:', 'https:', 'file:'].includes(url.protocol)) return false;
+      await chrome.tabs.create({ url: url.href });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   chrome.runtime.onInstalled.addListener(() => {
     scheduleChecks();
     checkForUpdates(true);
@@ -154,6 +165,10 @@
     }
     if (message?.type === 'OPEN_UPDATE_PAGE') {
       openLatestRelease().then(() => sendResponse({ ok: true }));
+      return true;
+    }
+    if (message?.type === 'OPEN_URL_IN_NEW_TAB') {
+      openUrlInNewTab(message.url).then((ok) => sendResponse({ ok }));
       return true;
     }
     return false;

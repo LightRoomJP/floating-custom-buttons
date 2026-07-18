@@ -4,7 +4,7 @@
   const MAX_BUTTONS = 10;
   const DEFAULT_SETTINGS = { enabled: true, editMode: false, buttons: [], presets: [], updateStatus: null };
   const DEFAULT_COLORS = ['#147db8', '#7357c7', '#b44f7a', '#b26832', '#2d8a72', '#445c7d', '#9a3f4f'];
-  const ACTION_LABELS = { reload: 'リロード', back: '戻る', forward: '進む', home: 'ホーム', url: '開く' };
+  const ACTION_LABELS = { reload: 'リロード', back: '戻る', forward: '進む', home: 'サイトTOP', url: '開く', newTab: '新しいタブ' };
 
   const enabledInput = document.getElementById('enabled');
   const editModeButton = document.getElementById('editMode');
@@ -36,7 +36,8 @@
     const text = value.trim();
     if (!text) return '';
     try {
-      return new URL(/^https?:\/\//i.test(text) ? text : `https://${text}`).href;
+      const url = new URL(/^(https?|file):/i.test(text) ? text : `https://${text}`);
+      return ['http:', 'https:', 'file:'].includes(url.protocol) ? url.href : null;
     } catch {
       return null;
     }
@@ -59,7 +60,7 @@
     return {
       id: replaceId || !button.id ? uid() : String(button.id),
       label: String(button.label || ACTION_LABELS[button.action] || 'ボタン').slice(0, 20),
-      action: ['reload', 'back', 'forward', 'home', 'url'].includes(button.action) ? button.action : 'reload',
+      action: ['reload', 'back', 'forward', 'home', 'url', 'newTab'].includes(button.action) ? button.action : 'reload',
       url: String(button.url || ''),
       color: /^#[0-9a-f]{6}$/i.test(button.color) ? button.color : DEFAULT_COLORS[index % DEFAULT_COLORS.length],
       size: ['small', 'medium', 'large'].includes(button.size) ? button.size : 'medium',
@@ -138,7 +139,7 @@
   }
 
   function updateActionVisibility(card) {
-    const isUrl = card.querySelector('.action-input').value === 'url';
+    const isUrl = ['url', 'newTab'].includes(card.querySelector('.action-input').value);
     card.querySelector('.url-field').hidden = !isUrl;
   }
 
@@ -183,7 +184,7 @@
     syncDraft();
     for (const button of state.buttons) {
       if (!button.label) button.label = ACTION_LABELS[button.action] || 'ボタン';
-      if (button.action === 'url') {
+      if (['url', 'newTab'].includes(button.action)) {
         const url = normalizeUrl(button.url);
         if (!url) {
           setStatus('有効なURLを入力してください', true);

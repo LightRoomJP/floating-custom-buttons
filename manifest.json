@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "グラブル Custom Buttons",
-  "version": "1.2.0",
-  "description": "グラブルの画面上に、最大10個のカスタムボタンを自由配置し、配置プリセットと更新通知を利用できます。",
+  "name": "Floating Custom Buttons",
+  "version": "2.0.0",
+  "description": "Webページ上に最大10個のカスタムボタンを自由配置し、配置プリセットと更新通知を利用できます。",
   "permissions": [
     "storage",
     "alarms",
@@ -21,7 +21,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://game.granbluefantasy.jp/*"
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
       ],
       "css": [
         "content.css"

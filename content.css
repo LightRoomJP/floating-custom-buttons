@@ -1,4 +1,4 @@
-#gbcb-root {
+#fcb-root {
   position: fixed;
   inset: 0;
   z-index: 2147483647;
@@ -6,7 +6,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", sans-serif;
 }
 
-#gbcb-root .gbcb-button {
+#fcb-root .fcb-button {
   position: absolute;
   display: inline-flex;
   align-items: center;
@@ -33,16 +33,16 @@
   transition: filter 120ms ease, transform 80ms ease, box-shadow 120ms ease;
 }
 
-#gbcb-root .gbcb-button:hover {
+#fcb-root .fcb-button:hover {
   filter: brightness(1.12);
   box-shadow: 0 5px 20px rgba(0, 0, 0, .42), inset 0 1px rgba(255, 255, 255, .22);
 }
 
-#gbcb-root .gbcb-button:active {
+#fcb-root .fcb-button:active {
   transform: translateY(1px);
 }
 
-#gbcb-root .gbcb-button[data-size="small"] {
+#fcb-root .fcb-button[data-size="small"] {
   min-width: 58px;
   height: 34px;
   padding: 0 11px;
@@ -50,7 +50,7 @@
   font-size: 12px;
 }
 
-#gbcb-root .gbcb-button[data-size="large"] {
+#fcb-root .fcb-button[data-size="large"] {
   min-width: 92px;
   height: 48px;
   padding: 0 18px;
@@ -58,28 +58,28 @@
   font-size: 15px;
 }
 
-#gbcb-root.gbcb-editing .gbcb-button {
+#fcb-root.fcb-editing .fcb-button {
   border: 2px dashed #fff;
   cursor: grab;
-  animation: gbcb-edit-pulse 1.6s ease-in-out infinite;
+  animation: fcb-edit-pulse 1.6s ease-in-out infinite;
 }
 
-#gbcb-root.gbcb-editing .gbcb-button:active {
+#fcb-root.fcb-editing .fcb-button:active {
   cursor: grabbing;
   animation: none;
 }
 
-#gbcb-root .gbcb-icon {
+#fcb-root .fcb-icon {
   flex: 0 0 auto;
   font-size: 16px;
 }
 
-#gbcb-root .gbcb-label {
+#fcb-root .fcb-label {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-#gbcb-root .gbcb-edit-bar {
+#fcb-root .fcb-edit-bar {
   position: absolute;
   top: 12px;
   left: 50%;
@@ -97,11 +97,11 @@
   pointer-events: auto;
 }
 
-#gbcb-root.gbcb-editing .gbcb-edit-bar {
+#fcb-root.fcb-editing .fcb-edit-bar {
   display: flex;
 }
 
-#gbcb-root .gbcb-edit-done {
+#fcb-root .fcb-edit-done {
   min-height: 29px;
   padding: 0 13px;
   border: 1px solid #66d2ff;
@@ -113,16 +113,16 @@
   cursor: pointer;
 }
 
-#gbcb-root .gbcb-edit-done:hover {
+#fcb-root .fcb-edit-done:hover {
   background: #1b93d2;
 }
 
-@keyframes gbcb-edit-pulse {
+@keyframes fcb-edit-pulse {
   0%, 100% { box-shadow: 0 4px 16px rgba(0, 0, 0, .35), 0 0 0 0 rgba(255, 255, 255, .18); }
   50% { box-shadow: 0 4px 16px rgba(0, 0, 0, .35), 0 0 0 5px rgba(255, 255, 255, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #gbcb-root .gbcb-button { transition: none; }
-  #gbcb-root.gbcb-editing .gbcb-button { animation: none; }
+  #fcb-root .fcb-button { transition: none; }
+  #fcb-root.fcb-editing .fcb-button { animation: none; }
 }
