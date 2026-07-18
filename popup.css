@@ -7,15 +7,16 @@
   --text: #f4f7fb;
   --muted: #9eacbd;
   --accent: #43b9ed;
+  --popup-height: 600px;
 }
 
 * { box-sizing: border-box; }
 
 body {
   width: 380px;
-  height: auto;
-  max-height: min(600px, 100vh);
-  min-height: min(310px, 100vh);
+  height: var(--popup-height);
+  max-height: 600px;
+  min-height: 460px;
   margin: 0;
   display: flex;
   flex-direction: column;

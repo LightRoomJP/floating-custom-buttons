@@ -52,6 +52,19 @@
     return Math.min(max, Math.max(min, value));
   }
 
+  async function fitPopupHeight() {
+    let popupHeight = 600;
+    try {
+      const browserWindow = await chrome.windows.getCurrent();
+      if (Number.isFinite(browserWindow?.height)) {
+        popupHeight = clamp(Math.floor(browserWindow.height - 140), 460, 600);
+      }
+    } catch {
+      // 取得できない環境ではChromeのポップアップ上限を使用する。
+    }
+    document.documentElement.style.setProperty('--popup-height', `${popupHeight}px`);
+  }
+
   function defaultPosition(index) {
     return { x: index % 2 === 0 ? 6 : 56, y: 14 + Math.floor(index / 2) * 13 };
   }
@@ -343,6 +356,8 @@
     renderPresets('');
     setStatus('プリセットを削除しました');
   });
+
+  fitPopupHeight();
 
   chrome.storage.local.get(DEFAULT_SETTINGS).then((stored) => {
     state = {
