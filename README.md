@@ -14,6 +14,7 @@ GitHub: <https://github.com/LightRoomJP/floating-custom-buttons>
 - ボタン数・設定・位置を名前付きプリセットとして保存、読込、削除
 - GitHub Releasesの新バージョン通知
 - ChromeとMicrosoft Edge向けの個別配布zip
+- ツールバー、拡張管理画面、通知で使用する専用アイコン
 
 ## インストール
 
@@ -64,6 +65,8 @@ ChromeやEdgeの内部ページ、各ブラウザの拡張ストアなど、ブ�
 ## Chrome / Edge互換性
 
 ChromeとMicrosoft Edgeは同じChromium拡張APIを利用できるため、機能コードは共通です。Releaseでは導入手順を分けた2種類のzipを提供します。
+
+アイコンの編集元は `icons/icon.svg` です。Pillowを導入したPython環境なら、マニフェストで使用するPNGを `python scripts/generate_icons.py` で再生成できます。
 
 ## リリース方法
 

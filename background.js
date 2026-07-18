@@ -39,7 +39,7 @@
 
     await chrome.notifications.create(`${NOTIFICATION_PREFIX}${status.latestVersion}`, {
       type: 'basic',
-      iconUrl: chrome.runtime.getURL('notification-icon.svg'),
+      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
       title: `Floating Custom Buttons v${status.latestVersion}`,
       message: '新しいバージョンがGitHubに公開されました。',
       contextMessage: `現在のバージョン: v${status.currentVersion}`,
