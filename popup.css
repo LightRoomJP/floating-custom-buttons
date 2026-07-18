@@ -161,7 +161,7 @@ main { padding: 14px 16px 16px; }
 .add-button {
   width: 100%;
   min-height: 38px;
-  margin-top: 10px;
+  margin: 0;
   border: 1px dashed #4b5d72;
   border-radius: 9px;
   background: transparent;
@@ -170,6 +170,8 @@ main { padding: 14px 16px 16px; }
 }
 .add-button:hover { background: rgba(67, 185, 237, .07); border-color: var(--accent); }
 .add-button:disabled { opacity: .38; cursor: not-allowed; }
+.add-actions { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8px; margin-top: 10px; }
+.add-button.current-tab { border-style: solid; border-color: rgba(67, 185, 237, .68); background: rgba(67, 185, 237, .09); }
 
 .button {
   min-height: 34px;

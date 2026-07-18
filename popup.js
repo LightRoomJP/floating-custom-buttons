@@ -10,6 +10,7 @@
   const editModeButton = document.getElementById('editMode');
   const list = document.getElementById('buttonList');
   const addButton = document.getElementById('addButton');
+  const addCurrentTabButton = document.getElementById('addCurrentTabButton');
   const saveButton = document.getElementById('saveButton');
   const count = document.getElementById('count');
   const status = document.getElementById('status');
@@ -53,6 +54,13 @@
 
   function defaultPosition(index) {
     return { x: index % 2 === 0 ? 6 : 56, y: 14 + Math.floor(index / 2) * 13 };
+  }
+
+  function currentTabLabel(tab, url) {
+    const title = String(tab?.title || '').trim();
+    if (title) return title.slice(0, 20);
+    if (url.protocol === 'file:') return decodeURIComponent(url.pathname.split('/').filter(Boolean).at(-1) || 'ローカルページ').slice(0, 20);
+    return (url.hostname || '現在のページ').slice(0, 20);
   }
 
   function normalizeButton(button = {}, index = 0, replaceId = false) {
@@ -177,6 +185,7 @@
 
     count.textContent = `${state.buttons.length} / ${MAX_BUTTONS}`;
     addButton.disabled = state.buttons.length >= MAX_BUTTONS;
+    addCurrentTabButton.disabled = state.buttons.length >= MAX_BUTTONS;
     renderPresets();
   }
 
@@ -213,6 +222,37 @@
       color: DEFAULT_COLORS[index % DEFAULT_COLORS.length], size: 'medium', ...defaultPosition(index)
     });
     render();
+  });
+
+  addCurrentTabButton.addEventListener('click', async () => {
+    syncDraft();
+    if (state.buttons.length >= MAX_BUTTONS) return;
+    addCurrentTabButton.disabled = true;
+    try {
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      const tab = tabs[0];
+      const url = new URL(String(tab?.url || ''));
+      if (!['http:', 'https:', 'file:'].includes(url.protocol)) {
+        setStatus('このページはボタンに設定できません', true);
+        return;
+      }
+      const index = state.buttons.length;
+      state.buttons.push({
+        id: uid(),
+        label: currentTabLabel(tab, url),
+        action: 'url',
+        url: url.href,
+        color: DEFAULT_COLORS[index % DEFAULT_COLORS.length],
+        size: 'medium',
+        ...defaultPosition(index)
+      });
+      render();
+      setStatus('現在のタブから追加しました。保存してください');
+    } catch {
+      setStatus('表示中のタブを取得できませんでした', true);
+    } finally {
+      addCurrentTabButton.disabled = state.buttons.length >= MAX_BUTTONS;
+    }
   });
 
   enabledInput.addEventListener('change', async () => {

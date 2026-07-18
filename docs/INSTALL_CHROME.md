@@ -13,6 +13,8 @@
 
 必要に応じてChromeの拡張メニューから「Floating Custom Buttons」をピン留めしてください。
 
+拡張画面の「＋ 現在のタブから追加」を押すと、そのタブのタイトルとURLが入力されたボタンを作成できます。追加後は「保存して反映」を押してください。
+
 ## ローカルHTMLで使用する場合
 
 1. `chrome://extensions/` でFloating Custom Buttonsの「詳細」を開きます。
