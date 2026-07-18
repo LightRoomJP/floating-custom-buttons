@@ -7,20 +7,17 @@
   --text: #f4f7fb;
   --muted: #9eacbd;
   --accent: #43b9ed;
+  --popup-height: 600px;
 }
 
 * { box-sizing: border-box; }
 
-html {
-  height: 100%;
-  background: var(--bg);
-}
-
 body {
-  width: min(380px, 100%);
-  height: 100vh;
-  min-height: 0;
-  margin: 0 auto;
+  width: 380px;
+  height: var(--popup-height);
+  max-height: 600px;
+  min-height: 460px;
+  margin: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -68,12 +65,37 @@ main {
   overflow: hidden;
 }
 
-main > .update-panel,
-main > .placement,
-main > .preset-panel,
+main > .settings-panel,
 main > .section-title {
   flex: 0 0 auto;
 }
+
+.settings-panel {
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #151e29;
+  overflow: hidden;
+}
+
+.settings-panel > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  padding: 0 11px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.settings-panel > summary::-webkit-details-marker { display: none; }
+.settings-panel > summary::after { content: "開く"; color: var(--accent); font-size: 10px; }
+.settings-panel[open] > summary { border-bottom: 1px solid var(--line); }
+.settings-panel[open] > summary::after { content: "閉じる"; }
+.settings-body { padding: 9px; }
+.settings-body > :last-child { margin-bottom: 0; }
 
 .update-panel {
   display: flex;
@@ -236,6 +258,7 @@ footer {
 @media (max-height: 600px) {
   .header { padding: 12px 16px 10px; }
   main { padding: 10px 12px 11px; }
+  .settings-body { max-height: 230px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
   .update-panel { margin-bottom: 8px; padding: 8px 9px; }
   .placement { margin-bottom: 10px; padding: 8px 9px; }
   .preset-panel { margin-bottom: 10px; padding: 9px; }
@@ -246,6 +269,7 @@ footer {
   .header { padding: 7px 14px; }
   .eyebrow, .update-copy small, .placement small, .preset-panel > small { display: none; }
   main { padding: 8px 10px 9px; }
+  .settings-body { max-height: 175px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
   .update-panel, .placement, .preset-panel { margin-bottom: 7px; padding: 7px 8px; }
   footer { padding: 7px 10px; }
 }
