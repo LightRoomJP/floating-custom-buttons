@@ -13,7 +13,6 @@
 
 body {
   width: 380px;
-  max-width: 100vw;
   height: auto;
   max-height: min(600px, 100vh);
   min-height: min(310px, 100vh);
