@@ -8,6 +8,8 @@
 
   const enabledInput = document.getElementById('enabled');
   const editModeButton = document.getElementById('editMode');
+  const settingsToggleButton = document.getElementById('settingsToggle');
+  const settingsPanel = document.getElementById('settingsPanel');
   const list = document.getElementById('buttonList');
   const addButton = document.getElementById('addButton');
   const addCurrentTabButton = document.getElementById('addCurrentTabButton');
@@ -74,6 +76,29 @@
     if (title) return title.slice(0, 20);
     if (url.protocol === 'file:') return decodeURIComponent(url.pathname.split('/').filter(Boolean).at(-1) || 'ローカルページ').slice(0, 20);
     return (url.hostname || '現在のページ').slice(0, 20);
+  }
+
+  async function getCurrentPageInfo() {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tab = tabs[0];
+    if (!tab) return null;
+
+    let pageInfo = { title: tab.title, url: tab.url };
+    if ((!pageInfo.url || !pageInfo.title) && tab.id) {
+      try {
+        pageInfo = { ...pageInfo, ...await chrome.tabs.sendMessage(tab.id, { type: 'GET_CURRENT_PAGE_INFO' }) };
+      } catch {
+        // Browser-internal pages do not have the content script.
+      }
+    }
+
+    try {
+      const url = new URL(String(pageInfo.url || ''));
+      if (!['http:', 'https:', 'file:'].includes(url.protocol)) return null;
+      return { ...pageInfo, url };
+    } catch {
+      return null;
+    }
   }
 
   function normalizeButton(button = {}, index = 0, replaceId = false) {
@@ -168,7 +193,7 @@
     list.replaceChildren();
     enabledInput.checked = state.enabled;
     editModeButton.classList.toggle('active', state.editMode);
-    editModeButton.textContent = state.editMode ? '配置編集を終了' : '配置を編集';
+    editModeButton.textContent = state.editMode ? '✓ 配置編集を終了' : '↔ 配置を編集';
 
     if (!state.buttons.length) {
       const empty = document.createElement('div');
@@ -187,6 +212,23 @@
       card.querySelector('.color-input').value = button.color;
       card.querySelector('.url-input').value = button.url || '';
       card.querySelector('.action-input').addEventListener('change', () => updateActionVisibility(card));
+      card.querySelector('.use-current-url-button').addEventListener('click', async (event) => {
+        const target = event.currentTarget;
+        target.disabled = true;
+        try {
+          const pageInfo = await getCurrentPageInfo();
+          if (!pageInfo) {
+            setStatus('このページのURLは設定できません', true);
+            return;
+          }
+          card.querySelector('.url-input').value = pageInfo.url.href;
+          setStatus(`BUTTON ${index + 1} に現在のURLを反映しました。保存してください`);
+        } catch {
+          setStatus('表示中のタブを取得できませんでした', true);
+        } finally {
+          target.disabled = false;
+        }
+      });
       card.querySelector('.delete-button').addEventListener('click', () => {
         syncDraft();
         state.buttons = state.buttons.filter((item) => item.id !== button.id);
@@ -242,27 +284,17 @@
     if (state.buttons.length >= MAX_BUTTONS) return;
     addCurrentTabButton.disabled = true;
     try {
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-      const tab = tabs[0];
-      let pageInfo = { title: tab?.title, url: tab?.url };
-      if (tab?.id) {
-        try {
-          pageInfo = { ...pageInfo, ...await chrome.tabs.sendMessage(tab.id, { type: 'GET_CURRENT_PAGE_INFO' }) };
-        } catch {
-          // Browser-internal pages do not have the content script.
-        }
-      }
-      const url = new URL(String(pageInfo.url || ''));
-      if (!['http:', 'https:', 'file:'].includes(url.protocol)) {
+      const pageInfo = await getCurrentPageInfo();
+      if (!pageInfo) {
         setStatus('このページはボタンに設定できません', true);
         return;
       }
       const index = state.buttons.length;
       state.buttons.push({
         id: uid(),
-        label: currentTabLabel(pageInfo, url),
+        label: currentTabLabel(pageInfo, pageInfo.url),
         action: 'url',
-        url: url.href,
+        url: pageInfo.url.href,
         color: DEFAULT_COLORS[index % DEFAULT_COLORS.length],
         size: 'medium',
         ...defaultPosition(index)
@@ -281,12 +313,19 @@
     await chrome.storage.local.set({ enabled: state.enabled });
   });
 
+  settingsToggleButton.addEventListener('click', () => {
+    const expanded = settingsToggleButton.getAttribute('aria-expanded') === 'true';
+    settingsToggleButton.setAttribute('aria-expanded', String(!expanded));
+    settingsPanel.hidden = expanded;
+  });
+
   editModeButton.addEventListener('click', async () => {
-    if (!validateDraft()) return;
+    syncDraft();
     state.enabled = enabledInput.checked;
     state.editMode = !state.editMode;
     await chrome.storage.local.set({ enabled: state.enabled, editMode: state.editMode, buttons: state.buttons.slice(0, MAX_BUTTONS) });
     render();
+    setStatus(state.editMode ? '配置編集を開始しました' : '配置編集を終了しました');
   });
 
   saveButton.addEventListener('click', save);
