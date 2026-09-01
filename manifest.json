@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Floating Custom Buttons",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Webページ上に最大10個のカスタムボタンを自由配置し、配置プリセットと更新通知を利用できます。",
   "permissions": [
     "storage",

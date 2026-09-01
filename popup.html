@@ -19,14 +19,18 @@
   </header>
 
   <main>
-    <details class="settings-panel">
-      <summary>更新・配置・プリセット</summary>
+    <div class="quick-actions">
+      <button id="editMode" class="button secondary quick-edit-button" type="button">↔ 配置を編集</button>
+      <button id="settingsToggle" class="button secondary settings-toggle" type="button" aria-expanded="false" aria-controls="settingsPanel">更新・プリセット</button>
+    </div>
+
+    <section id="settingsPanel" class="settings-panel" hidden>
       <div class="settings-body">
         <section id="updatePanel" class="update-panel">
           <div class="update-copy">
             <div class="update-heading">
               <strong>アップデート</strong>
-              <span id="currentVersion">v2.1.0</span>
+              <span id="currentVersion">v2.2.0</span>
             </div>
             <small id="updateStatus">更新状況を確認しています</small>
           </div>
@@ -34,14 +38,6 @@
             <button id="openUpdate" class="button update-open" type="button" hidden>更新を見る</button>
             <button id="checkUpdate" class="button secondary compact-button" type="button">確認</button>
           </div>
-        </section>
-
-        <section class="placement">
-          <div>
-            <strong>画面上の配置</strong>
-            <small>編集モードにして、ボタンをドラッグ</small>
-          </div>
-          <button id="editMode" class="button secondary" type="button">配置を編集</button>
         </section>
 
         <section class="preset-panel">
@@ -63,7 +59,7 @@
           <small>ボタンの数・設定・画面上の位置をまとめて保存します。</small>
         </section>
       </div>
-    </details>
+    </section>
 
     <div class="section-title">
       <span>ボタン</span>
@@ -116,10 +112,13 @@
           <input class="color-input" type="color">
         </label>
       </div>
-      <label class="field full url-field">
-        <span>開くURL</span>
-        <input class="url-input" type="url" placeholder="https://example.com/">
-      </label>
+      <div class="field full url-field">
+        <div class="field-heading">
+          <span>開くURL</span>
+          <button class="use-current-url-button" type="button">現在のURLを反映</button>
+        </div>
+        <input class="url-input" type="url" aria-label="開くURL" placeholder="https://example.com/">
+      </div>
     </article>
   </template>
 
